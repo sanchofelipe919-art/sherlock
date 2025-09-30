@@ -1,0 +1,25 @@
+# sólo verifica si Instagram responde para ese username
+curl -I -A "Mozilla/5.0 (X11; Linux x86_64)" https://www.instagram.com/last_shagui/
+
+# save as check_usernames.py
+import requests, time
+
+USER = "last_shagui"   # last_shagui
+PATTERNS = [
+    "https://www.instagram.com/{}/",
+    "https://twitter.com/{}",
+    "https://www.reddit.com/user/{}",
+    "https://www.tiktok.com/@{}",
+    "https://www.facebook.com/{}",
+]
+
+HEADERS = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"}
+
+for pattern in PATTERNS:
+    url = pattern.format(USER)
+    try:
+        r = requests.head(url, headers=HEADERS, timeout=10, allow_redirects=True)
+        print(f"{url} -> {r.status_code}")
+    except Exception as e:
+        print(f"{url} -> error: {e}")
+    time.sleep(1)  # Respeta rate limits
